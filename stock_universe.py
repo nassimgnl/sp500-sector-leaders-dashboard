@@ -11,6 +11,7 @@ import pandas as pd
 
 UNIVERSE_PATH = Path(__file__).resolve().parent / "data" / "universe.csv"
 TOP_N_PER_SECTOR = 5
+NON_MEMBER_MARK = "\\*"  # escaped asterisk, rendered as "*" in Markdown
 REQUIRED_COLUMNS = ["ticker", "name", "sector", "market_cap_usd", "in_sp500", "as_of"]
 GICS_SECTORS = [
     "Communication Services",
@@ -55,6 +56,27 @@ def merge_extra_holdings(top, extras):
     """Append hand-picked holdings that are not already in ``top``."""
     new_rows = extras[~extras["ticker"].isin(top["ticker"])]
     return pd.concat([top, new_rows], ignore_index=True)
+
+
+def render_universe_table(universe):
+    """Markdown summary of the universe (one row per sector, largest company first) for the README."""
+    as_of = pd.Timestamp(universe["as_of"].iloc[0])
+    def label(row):
+        return row.ticker if row.in_sp500 else f"{row.ticker}{NON_MEMBER_MARK}"
+
+    rows = [
+        f"| {sector} | {', '.join(label(row) for row in stocks_in_sector(universe, sector).itertuples())} |"
+        for sector in sorted(universe["sector"].unique())
+    ]
+    return "\n".join([
+        f"Universe as of **{as_of.day} {as_of:%B %Y}** (sorted by market capitalisation within each sector):",
+        "",
+        "| GICS sector | Companies |",
+        "|---|---|",
+        *rows,
+        "",
+        f"{NON_MEMBER_MARK} Not an S&P 500 constituent.",
+    ])
 
 
 def stocks_in_sector(universe, sector):

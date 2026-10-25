@@ -1,5 +1,11 @@
 # S&P 500 Sector Leaders — Equity Risk & Performance Dashboard
 
+[![Live demo](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://sp500-sector-leaders.streamlit.app)
+[![Tests](https://github.com/nassimgnl/sp500-sector-leaders-dashboard/actions/workflows/tests.yml/badge.svg)](https://github.com/nassimgnl/sp500-sector-leaders-dashboard/actions/workflows/tests.yml)
+[![Universe update](https://github.com/nassimgnl/sp500-sector-leaders-dashboard/actions/workflows/update-universe.yml/badge.svg)](https://github.com/nassimgnl/sp500-sector-leaders-dashboard/actions/workflows/update-universe.yml)
+
+**▶ [Open the live dashboard](https://sp500-sector-leaders.streamlit.app)**: no installation needed.
+
 An interactive dashboard to analyse the risk and return profile of the largest U.S. companies in each GICS sector, benchmarked against the S&P 500 Total Return index.
 
 Built with Python, pandas, Plotly and Streamlit, using publicly available market data.
@@ -44,6 +50,7 @@ Construction rules (`universe_refresh.py`):
 4. Rank companies within each sector by market capitalisation and keep the top five.
 5. Save the result, with its build date, to `data/universe.csv`.
 
+<!-- universe:start -->
 Universe as of **25 October 2026** (sorted by market capitalisation within each sector):
 
 | GICS sector | Companies |
@@ -61,6 +68,7 @@ Universe as of **25 October 2026** (sorted by market capitalisation within each 
 | Utilities | NEE, SO, DUK, CEG, AEP |
 
 \* Not an S&P 500 constituent.
+<!-- universe:end -->
 
 Storing the universe in a versioned file, rather than recomputing it on every page load, keeps the dashboard fast and makes the stock list **reproducible and dated**.
 
@@ -71,8 +79,13 @@ Click **Update S&P 500 data** in the dashboard (or run `python scripts/build_uni
 - **Composition unchanged**: if the same companies are in the same sectors, the file is left untouched and keeps its original date, even if market caps or the ranking inside the top five moved.
 - **Composition changed**: if a company entered or left a sector's top five, or was reclassified to another sector, the new universe is saved with the current date and the dashboard lists the companies added and removed.
 - **Download failure**: if a source is unreachable or returns unexpected data, nothing is written and the current universe stays in use.
+- **Read-only hosting**: if the new universe cannot be saved on the server, it is still applied to the visitor's session, so the update is always visible.
 
 The file is written atomically (temporary file, then rename), so an interrupted update can never leave a half-written universe.
+
+### Automatic daily update
+
+A scheduled GitHub Actions workflow ([`update-universe.yml`](.github/workflows/update-universe.yml)) runs the same update after every US trading day. When the composition changed, it commits the new `data/universe.csv` and regenerates the universe table of this README; the live dashboard then redeploys automatically from the repository. No local machine is involved.
 
 ## Data sources
 
@@ -135,7 +148,8 @@ These are known simplifications. They are acceptable for an exploratory tool and
 ├── stock_universe.py         # Universe selection rules and validation
 ├── universe_refresh.py       # Live rebuild of the universe, saved only if it changed
 ├── scripts/
-│   └── build_universe.py     # Command-line universe update
+│   └── build_universe.py     # Command-line universe update (also used by the scheduled workflow)
+├── .github/workflows/       # CI tests and daily universe update
 ├── data/
 │   └── universe.csv          # Dated stock universe used by the dashboard
 ├── tests/                    # Unit tests (universe rules) and app tests (Streamlit AppTest)

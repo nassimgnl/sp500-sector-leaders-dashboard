@@ -157,3 +157,32 @@ def test_refresh_failure_keeps_universe_and_reports_error(isolated_universe, mon
     assert not app.exception
     assert any("source unavailable" in error.value for error in app.error)
     assert isolated_universe.read_bytes() == original
+
+
+def test_refresh_updates_the_dashboard_even_when_saving_is_impossible(isolated_universe, monkeypatch):
+    import universe_refresh
+
+    original = isolated_universe.read_bytes()
+    replaced = UNIVERSE["ticker"] == "VLO"
+    candidate = UNIVERSE.assign(
+        ticker=UNIVERSE["ticker"].where(~replaced, "OXY"),
+        name=UNIVERSE["name"].where(~replaced, "Occidental Petroleum"),
+        as_of="2026-11-02",
+    )
+    use_builder(monkeypatch, lambda: candidate)
+
+    def read_only_save(universe, path):
+        raise PermissionError("read-only file system")
+
+    monkeypatch.setattr(universe_refresh, "save_universe", read_only_save)
+
+    app = click_refresh(run_app(sector="Energy"))
+
+    assert not app.exception
+    assert any("this session" in message.value for message in app.warning)
+
+    app.run()  # the session keeps the unsaved update on later interactions
+
+    assert any("(OXY)" in label for label in app.selectbox(key="ticker").options)
+    assert "2026-11-02" in page_text(app)
+    assert isolated_universe.read_bytes() == original

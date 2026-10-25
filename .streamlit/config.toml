@@ -7,3 +7,6 @@ textColor = "#FFFFFF"
 
 [browser]
 gatherUsageStats = false
+
+[client]
+toolbarMode = "viewer"

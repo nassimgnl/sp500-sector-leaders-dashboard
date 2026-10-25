@@ -1,0 +1,38 @@
+name: Update S&P 500 universe
+
+# Rebuilds the top five companies of each GICS sector after every US trading day.
+# Commits data/universe.csv and the README table only when the composition changed.
+on:
+  schedule:
+    - cron: "30 22 * * 1-5"  # 22:30 UTC, after the US market close
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: update-universe
+  cancel-in-progress: false
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+          cache: pip
+      - run: pip install -r requirements.txt
+      - run: python scripts/build_universe.py
+      - name: Commit the new universe if it changed
+        run: |
+          if git diff --quiet -- data/universe.csv README.md; then
+            echo "Top 5 per sector unchanged, nothing to commit."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/universe.csv README.md
+          git commit -m "chore: update S&P 500 universe ($(date -u +%Y-%m-%d))"
+          git push

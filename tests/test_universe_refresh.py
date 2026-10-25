@@ -95,3 +95,32 @@ def test_refresh_uses_the_live_builder_by_default(universe_file, monkeypatch):
     monkeypatch.setattr(universe_refresh, "build_universe", lambda: candidate)
 
     assert refresh_universe(universe_file).changed
+
+
+def test_refresh_returns_the_new_universe_even_when_it_cannot_be_saved(universe_file, monkeypatch):
+    original = universe_file.read_bytes()
+    candidate = make_universe([("XOM", "Energy", 1.0), ("COP", "Energy", 1.0), ("NEE", "Utilities", 1.0)], TODAY)
+
+    def read_only_save(universe, path):
+        raise PermissionError("read-only file system")
+
+    monkeypatch.setattr(universe_refresh, "save_universe", read_only_save)
+
+    result = refresh_universe(universe_file, build=lambda: candidate)
+
+    assert result.changed
+    assert not result.saved
+    assert set(result.universe["ticker"]) == {"XOM", "COP", "NEE"}
+    assert universe_file.read_bytes() == original
+
+
+def test_refresh_result_carries_the_active_universe(universe_file):
+    candidate = make_universe([("XOM", "Energy", 1.0), ("COP", "Energy", 1.0), ("NEE", "Utilities", 1.0)], TODAY)
+
+    changed = refresh_universe(universe_file, build=lambda: candidate)
+    unchanged = refresh_universe(universe_file, build=lambda: candidate)
+
+    assert changed.saved
+    assert set(changed.universe["ticker"]) == {"XOM", "COP", "NEE"}
+    assert not unchanged.changed
+    assert set(unchanged.universe["ticker"]) == {"XOM", "COP", "NEE"}

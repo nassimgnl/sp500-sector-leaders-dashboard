@@ -83,7 +83,10 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 try:
-    universe = load_universe()
+    # An update that could not be saved (e.g. read-only hosting) still applies to the visitor's session.
+    universe = st.session_state.get("unsaved_universe")
+    if universe is None:
+        universe = load_universe()
 except (OSError, ValueError) as error:
     st.error(f"Could not load the stock universe ({error}). Run `python scripts/build_universe.py` to rebuild it.")
     st.stop()
@@ -105,10 +108,14 @@ def refresh_message(result):
     if not result.changed:
         return "info", (f"Checked on {date.today():%Y-%m-%d}: the top 5 per sector has not changed. "
                         f"Universe dated {result.as_of} kept.")
-    if not (result.added or result.removed):
-        return "success", f"Universe updated on {result.as_of}: sector classification changed."
-    return "success", (f"Universe updated on {result.as_of}. "
-                       f"Added: {', '.join(result.added) or 'none'}. Removed: {', '.join(result.removed) or 'none'}.")
+    if result.added or result.removed:
+        summary = (f"Universe updated on {result.as_of}. "
+                   f"Added: {', '.join(result.added) or 'none'}. Removed: {', '.join(result.removed) or 'none'}.")
+    else:
+        summary = f"Universe updated on {result.as_of}: sector classification changed."
+    if not result.saved:
+        return "warning", f"{summary} Shown for this session only: the update could not be saved on this server."
+    return "success", summary
 
 
 def refresh_universe_data():
@@ -120,10 +127,14 @@ def refresh_universe_data():
         return
 
     st.session_state["refresh_feedback"] = refresh_message(result)
-    if result.changed:
-        sector_stocks_after = stocks_in_sector(load_universe(), st.session_state["sector"])["ticker"]
-        if st.session_state.get("ticker") not in set(sector_stocks_after):
-            st.session_state["ticker"] = sector_stocks_after.iloc[0]
+    if result.changed and not result.saved:
+        st.session_state["unsaved_universe"] = result.universe
+    else:
+        st.session_state.pop("unsaved_universe", None)
+
+    sector_stocks_after = stocks_in_sector(result.universe, st.session_state["sector"])["ticker"]
+    if st.session_state.get("ticker") not in set(sector_stocks_after):
+        st.session_state["ticker"] = sector_stocks_after.iloc[0]
 
 
 header = st.empty()
@@ -164,7 +175,7 @@ st.markdown(f"""
 feedback = st.session_state.pop("refresh_feedback", None)
 if feedback is not None:
     level, message = feedback
-    {"info": st.info, "success": st.success, "error": st.error}[level](message)
+    {"info": st.info, "success": st.success, "warning": st.warning, "error": st.error}[level](message)
 
 start_date = st.sidebar.date_input("Start date", pd.to_datetime("2021-01-01"))
 end_date = st.sidebar.date_input("End date", date.today())

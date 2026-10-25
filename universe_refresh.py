@@ -50,6 +50,8 @@ class RefreshResult:
     added: tuple
     removed: tuple
     as_of: str
+    universe: pd.DataFrame
+    saved: bool = True
 
 
 def fetch_constituents():
@@ -152,8 +154,16 @@ def refresh_universe(path=None, build=None):
     current = stock_universe.load_universe(path) if path.exists() else candidate.iloc[0:0]
 
     if composition(candidate) == composition(current):
-        return RefreshResult(changed=False, added=(), removed=(), as_of=str(current["as_of"].iloc[0]))
+        return RefreshResult(changed=False, added=(), removed=(), as_of=str(current["as_of"].iloc[0]), universe=current)
 
     added, removed = universe_changes(current, candidate)
-    save_universe(candidate, path)
-    return RefreshResult(changed=True, added=added, removed=removed, as_of=str(candidate["as_of"].iloc[0]))
+    try:
+        save_universe(candidate, path)
+        saved = True
+    except OSError as error:
+        # Hosted deployments may have a read-only or ephemeral disk: the update still applies in memory.
+        log.warning("Universe changed but could not be saved to %s: %s", path, error)
+        saved = False
+
+    return RefreshResult(changed=True, added=added, removed=removed, as_of=str(candidate["as_of"].iloc[0]),
+                         universe=candidate, saved=saved)
