@@ -1,0 +1,58 @@
+ticker,name,sector,market_cap_usd,in_sp500,as_of
+GOOGL,Alphabet Inc. (Class A),Communication Services,3916147327731,True,2026-10-25
+META,Meta Platforms,Communication Services,1637078437871,True,2026-10-25
+NFLX,Netflix,Communication Services,274195421311,True,2026-10-25
+DIS,Walt Disney Company (The),Communication Services,194286804417,True,2026-10-25
+VZ,Verizon,Communication Services,185552259887,True,2026-10-25
+AMZN,Amazon,Consumer Discretionary,2675005765856,True,2026-10-25
+TSLA,"Tesla, Inc.",Consumer Discretionary,1471285222375,True,2026-10-25
+HD,Home Depot (The),Consumer Discretionary,319091059687,True,2026-10-25
+MCD,McDonald's,Consumer Discretionary,175820619543,True,2026-10-25
+TJX,TJX Companies,Consumer Discretionary,160248424240,True,2026-10-25
+WMT,Walmart,Consumer Staples,951176831991,True,2026-10-25
+COST,Costco,Consumer Staples,444600541684,True,2026-10-25
+KO,Coca-Cola Company (The),Consumer Staples,398889336379,True,2026-10-25
+PG,Procter & Gamble,Consumer Staples,373209451588,True,2026-10-25
+PM,Philip Morris International,Consumer Staples,310896624580,True,2026-10-25
+XOM,ExxonMobil,Energy,753343417798,True,2026-10-25
+CVX,Chevron Corporation,Energy,457465512699,True,2026-10-25
+COP,ConocoPhillips,Energy,183718739974,True,2026-10-25
+MPC,Marathon Petroleum,Energy,133479268611,True,2026-10-25
+VLO,Valero Energy,Energy,120722225497,True,2026-10-25
+BRK-B,Berkshire Hathaway,Financials,1160671448435,True,2026-10-25
+JPM,JPMorgan Chase,Financials,880543812341,True,2026-10-25
+V,Visa Inc.,Financials,765810782460,True,2026-10-25
+MA,Mastercard,Financials,546279777197,True,2026-10-25
+BAC,Bank of America,Financials,350011485038,True,2026-10-25
+LLY,Lilly (Eli),Health Care,1135596976051,True,2026-10-25
+JNJ,Johnson & Johnson,Health Care,635072515396,True,2026-10-25
+ABBV,AbbVie,Health Care,504759407173,True,2026-10-25
+UNH,UnitedHealth Group,Health Care,375275426295,True,2026-10-25
+MRK,Merck & Co.,Health Care,358406034393,True,2026-10-25
+CAT,Caterpillar Inc.,Industrials,315796648743,True,2026-10-25
+GE,GE Aerospace,Industrials,296369371412,True,2026-10-25
+RTX,RTX Corporation,Industrials,257756631661,True,2026-10-25
+GEV,GE Vernova,Industrials,217061868515,True,2026-10-25
+DE,Deere & Company,Industrials,174218466546,True,2026-10-25
+ETN,Eaton Corporation,Industrials,142160507312,True,2026-10-25
+NVDA,Nvidia,Information Technology,5094051282120,True,2026-10-25
+AAPL,Apple Inc.,Information Technology,5074834371736,True,2026-10-25
+MSFT,Microsoft,Information Technology,3894772938000,True,2026-10-25
+TSM,Taiwan Semiconductor Manufacturing (ADR),Information Technology,2170591289830,False,2026-10-25
+AVGO,Broadcom,Information Technology,1535581220010,True,2026-10-25
+MU,Micron Technology,Information Technology,992880425879,True,2026-10-25
+LIN,Linde plc,Materials,234560530149,True,2026-10-25
+NEM,Newmont,Materials,113136964905,True,2026-10-25
+FCX,Freeport-McMoRan,Materials,93599622587,True,2026-10-25
+SHW,Sherwin-Williams,Materials,81824061783,True,2026-10-25
+ECL,Ecolab,Materials,80883211481,True,2026-10-25
+WELL,Welltower,Real Estate,171006154928,True,2026-10-25
+PLD,Prologis,Real Estate,120169651989,True,2026-10-25
+EQIX,Equinix,Real Estate,94234423171,True,2026-10-25
+AMT,American Tower,Real Estate,88052470839,True,2026-10-25
+SPG,Simon Property Group,Real Estate,68474901739,True,2026-10-25
+NEE,NextEra Energy,Utilities,172188823423,True,2026-10-25
+SO,Southern Company,Utilities,106857215210,True,2026-10-25
+DUK,Duke Energy,Utilities,97447182699,True,2026-10-25
+CEG,Constellation Energy,Utilities,89799204126,True,2026-10-25
+AEP,American Electric Power,Utilities,70602893910,True,2026-10-25
