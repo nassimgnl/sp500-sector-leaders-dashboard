@@ -139,6 +139,9 @@ These are known simplifications. They are acceptable for an exploratory tool and
 Requires Python 3.11 or later.
 
 ```bash
+git clone https://github.com/nassimgnl/sp500-sector-leaders-dashboard.git
+cd sp500-sector-leaders-dashboard
+
 python3 -m venv .venv
 source .venv/bin/activate
 pip install -r requirements.txt
