@@ -40,7 +40,7 @@ Ce tableau de bord répond à ces questions sur un seul écran pour les leaders 
 
 ## Univers d'investissement
 
-L'univers sélectionnable est composé des **cinq plus grandes valeurs du S&P 500 par capitalisation boursière dans chacun des 11 secteurs GICS**, plus deux ajouts choisis manuellement : Taiwan Semiconductor Manufacturing (TSM, un ADR qui ne fait pas partie du S&P 500) et Eaton Corporation (ETN).
+L'univers sélectionnable est composé des **cinq plus grandes valeurs du S&P 500 par capitalisation boursière dans chacun des 11 secteurs GICS**, soit 55 entreprises. Aucune valeur n'est ajoutée manuellement.
 
 Règles de construction (`universe_refresh.py`) :
 
@@ -61,13 +61,11 @@ Univers au **25 octobre 2026** (trié par capitalisation boursière au sein de c
 | Energy | XOM, CVX, COP, MPC, VLO |
 | Financials | BRK-B, JPM, V, MA, BAC |
 | Health Care | LLY, JNJ, ABBV, UNH, MRK |
-| Industrials | CAT, GE, RTX, GEV, DE, ETN |
-| Information Technology | NVDA, AAPL, MSFT, TSM\*, AVGO, MU |
+| Industrials | CAT, GE, RTX, GEV, DE |
+| Information Technology | NVDA, AAPL, MSFT, AVGO, MU |
 | Materials | LIN, NEM, FCX, SHW, ECL |
 | Real Estate | WELL, PLD, EQIX, AMT, SPG |
 | Utilities | NEE, SO, DUK, CEG, AEP |
-
-\* Ne fait pas partie du S&P 500.
 <!-- universe:end -->
 
 Stocker l'univers dans un fichier versionné, plutôt que de le recalculer à chaque chargement de page, garde le tableau de bord rapide et rend la liste des actions **reproductible et datée**.
@@ -190,7 +188,7 @@ pip install -r requirements-dev.txt
 pytest
 ```
 
-La suite de tests couvre les indicateurs relatifs à l'indice (vérifiés sur des séries de rendements synthétiques dont le résultat est connu), les règles de sélection de l'univers (classement des N premiers, dédoublonnage des catégories d'actions, validation des entrées), la logique de mise à jour (fichier réécrit uniquement si la composition change, intact en cas d'échec), l'intégrité du fichier d'univers fourni, et le tableau de bord lui-même (vue par défaut, sélection du secteur et de l'action, choix de l'indice de référence, bouton de mise à jour) via `AppTest` de Streamlit. Les tests de l'application téléchargent des données de marché en direct et nécessitent donc une connexion internet.
+La suite de tests couvre les indicateurs relatifs à l'indice (vérifiés sur des séries de rendements synthétiques dont le résultat est connu), les règles de sélection de l'univers (classement des N premiers, dédoublonnage des catégories d'actions, validation des entrées), la logique de mise à jour (fichier réécrit uniquement si la composition change, intact en cas d'échec), l'intégrité du fichier d'univers fourni, et le tableau de bord lui-même (vue par défaut, sélection du secteur et de l'action, utilisation du S&P 500 Total Return comme indice de référence, bouton de mise à jour) via `AppTest` de Streamlit. Les tests de l'application téléchargent des données de marché en direct et nécessitent donc une connexion internet.
 
 ## Avertissement
 

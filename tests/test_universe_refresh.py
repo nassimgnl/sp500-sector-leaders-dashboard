@@ -10,7 +10,7 @@ TODAY = "2026-11-02"
 
 def make_universe(rows, as_of="2026-10-25"):
     return pd.DataFrame(
-        [{"ticker": ticker, "name": ticker, "sector": sector, "market_cap_usd": cap, "in_sp500": True, "as_of": as_of}
+        [{"ticker": ticker, "name": ticker, "sector": sector, "market_cap_usd": cap, "as_of": as_of}
          for ticker, sector, cap in rows],
         columns=REQUIRED_COLUMNS,
     )

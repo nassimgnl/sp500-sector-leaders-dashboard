@@ -100,8 +100,7 @@ def select_sector_leader():
 
 
 def stock_label(symbol):
-    label = f"{companies.at[symbol, 'name']} ({symbol})"
-    return label if companies.at[symbol, "in_sp500"] else f"{label} · not in S&P 500"
+    return f"{companies.at[symbol, 'name']} ({symbol})"
 
 
 def refresh_message(result):

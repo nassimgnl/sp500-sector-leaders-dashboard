@@ -6,7 +6,6 @@ from stock_universe import (
     REQUIRED_COLUMNS,
     TOP_N_PER_SECTOR,
     load_universe,
-    merge_extra_holdings,
     render_universe_table,
     select_top_by_sector,
     to_yahoo_ticker,
@@ -74,16 +73,6 @@ def test_select_top_by_sector_does_not_mutate_input():
     pd.testing.assert_frame_equal(constituents, snapshot)
 
 
-def test_merge_extra_holdings_appends_only_new_tickers():
-    top = pd.DataFrame({"ticker": ["NVDA"], "name": ["Nvidia"], "market_cap_usd": [4000.0]})
-    extras = pd.DataFrame({"ticker": ["NVDA", "TSM"], "name": ["Duplicate", "TSMC"], "market_cap_usd": [1.0, 1000.0]})
-
-    merged = merge_extra_holdings(top, extras)
-
-    assert merged["ticker"].tolist() == ["NVDA", "TSM"]
-    assert merged.loc[merged["ticker"] == "NVDA", "name"].item() == "Nvidia"
-
-
 def test_load_universe_rejects_missing_columns(tmp_path):
     path = tmp_path / "universe.csv"
     pd.DataFrame({"ticker": ["AAPL"]}).to_csv(path, index=False)
@@ -101,26 +90,24 @@ def test_load_universe_rejects_duplicate_tickers(tmp_path):
         load_universe(path)
 
 
-def test_shipped_universe_covers_every_gics_sector_with_top_sp500_names():
+def test_shipped_universe_holds_exactly_the_top_names_of_every_gics_sector():
     universe = load_universe()
 
-    sp500_members = universe[universe["in_sp500"]]
-    counts = sp500_members.groupby("sector")["ticker"].count()
+    counts = universe.groupby("sector")["ticker"].count()
 
     assert sorted(counts.index) == sorted(GICS_SECTORS)
-    assert (counts >= TOP_N_PER_SECTOR).all()
-    assert {"TSM", "ETN"} <= set(universe["ticker"])
+    assert (counts == TOP_N_PER_SECTOR).all()
 
 
-def test_render_universe_table_lists_sectors_by_market_cap_and_flags_non_members():
+def test_render_universe_table_lists_sectors_by_market_cap():
     universe = pd.DataFrame([
-        {"ticker": "CVX", "name": "Chevron", "sector": "Energy", "market_cap_usd": 400.0, "in_sp500": True, "as_of": "2026-11-02"},
-        {"ticker": "XOM", "name": "Exxon", "sector": "Energy", "market_cap_usd": 700.0, "in_sp500": True, "as_of": "2026-11-02"},
-        {"ticker": "TSM", "name": "TSMC", "sector": "Information Technology", "market_cap_usd": 2000.0, "in_sp500": False, "as_of": "2026-11-02"},
+        {"ticker": "CVX", "name": "Chevron", "sector": "Energy", "market_cap_usd": 400.0, "as_of": "2026-11-02"},
+        {"ticker": "XOM", "name": "Exxon", "sector": "Energy", "market_cap_usd": 700.0, "as_of": "2026-11-02"},
+        {"ticker": "NVDA", "name": "Nvidia", "sector": "Information Technology", "market_cap_usd": 2000.0, "as_of": "2026-11-02"},
     ])
 
     table = render_universe_table(universe)
 
     assert "Univers au **2 novembre 2026**" in table
     assert "| Energy | XOM, CVX |" in table
-    assert "| Information Technology | TSM\\* |" in table
+    assert "| Information Technology | NVDA |" in table

@@ -21,7 +21,6 @@ import stock_universe
 from stock_universe import (
     GICS_SECTORS,
     REQUIRED_COLUMNS,
-    merge_extra_holdings,
     select_top_by_sector,
     to_yahoo_ticker,
     validate_universe,
@@ -33,13 +32,6 @@ REQUEST_TIMEOUT_SECONDS = 30
 MARKET_CAP_WORKERS = 8
 MIN_CONSTITUENTS = 490
 MAX_MISSING_MARKET_CAP_SHARE = 0.05
-
-# Holdings kept in the universe regardless of their sector rank.
-# TSM is a US-listed ADR, so it is not an S&P 500 member.
-EXTRA_HOLDINGS = {
-    "TSM": ("Taiwan Semiconductor Manufacturing (ADR)", "Information Technology"),
-    "ETN": ("Eaton Corporation", "Industrials"),
-}
 
 log = logging.getLogger(__name__)
 
@@ -93,7 +85,7 @@ def build_universe():
     constituents = fetch_constituents()
     log.info("Parsed %d S&P 500 constituents", len(constituents))
 
-    tickers = sorted(set(constituents["ticker"]) | set(EXTRA_HOLDINGS))
+    tickers = sorted(constituents["ticker"])
     market_caps = fetch_market_caps(tickers)
 
     missing = [ticker for ticker, cap in market_caps.items() if cap is None]
@@ -101,25 +93,7 @@ def build_universe():
         raise RuntimeError(f"Market cap missing for {len(missing)} tickers, aborting: {missing[:20]}")
 
     with_caps = constituents.assign(market_cap_usd=constituents["ticker"].map(market_caps))
-    top = select_top_by_sector(with_caps).assign(in_sp500=True)
-
-    extras = pd.DataFrame([
-        {
-            "ticker": ticker,
-            "name": name,
-            "sector": sector,
-            "market_cap_usd": market_caps[ticker],
-            "in_sp500": ticker in set(constituents["ticker"]),
-        }
-        for ticker, (name, sector) in EXTRA_HOLDINGS.items()
-    ])
-
-    return (
-        merge_extra_holdings(top, extras)
-        .assign(as_of=date.today().isoformat())
-        .sort_values(["sector", "market_cap_usd"], ascending=[True, False], kind="stable")
-        [REQUIRED_COLUMNS]
-    )
+    return select_top_by_sector(with_caps).assign(as_of=date.today().isoformat())[REQUIRED_COLUMNS]
 
 
 def composition(universe):

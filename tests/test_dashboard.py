@@ -64,9 +64,8 @@ def test_switching_sector_selects_its_largest_company():
 
 
 @pytest.mark.parametrize("sector, ticker", [
-    ("Information Technology", "TSM"),
     ("Information Technology", "AAPL"),
-    ("Industrials", "ETN"),
+    ("Industrials", "CAT"),
 ])
 def test_selecting_a_stock_updates_the_dashboard(sector, ticker):
     app = run_app(sector=sector, ticker=ticker)
