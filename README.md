@@ -81,9 +81,9 @@ Cliquer sur **Update S&P 500 data** dans le tableau de bord (ou lancer `python s
 
 Le fichier est écrit de manière atomique (fichier temporaire, puis renommage) : une mise à jour interrompue ne peut donc jamais laisser un univers à moitié écrit.
 
-### Mise à jour quotidienne automatique
+### Mise à jour hebdomadaire automatique
 
-Un workflow GitHub Actions planifié ([`update-universe.yml`](.github/workflows/update-universe.yml)) exécute la même mise à jour après chaque séance de bourse américaine. Lorsque la composition a changé, il commite le nouveau `data/universe.csv` et régénère le tableau de l'univers de ce README ; le tableau de bord en ligne se redéploie alors automatiquement depuis le dépôt. Aucune machine locale n'intervient.
+Un workflow GitHub Actions planifié ([`update-universe.yml`](.github/workflows/update-universe.yml)) exécute la même mise à jour chaque lundi soir à 22h30 UTC, après la clôture de la bourse américaine. Lorsque la composition a changé, il commite le nouveau `data/universe.csv` et régénère le tableau de l'univers de ce README ; le tableau de bord en ligne se redéploie alors automatiquement depuis le dépôt. Aucune machine locale n'intervient.
 
 ## Sources de données
 
@@ -147,7 +147,7 @@ Il s'agit de simplifications connues, acceptables pour un outil exploratoire et 
 ├── universe_refresh.py       # Reconstruction en direct de l'univers, enregistrée seulement si elle a changé
 ├── scripts/
 │   └── build_universe.py     # Mise à jour de l'univers en ligne de commande (utilisée aussi par le workflow planifié)
-├── .github/workflows/       # Tests CI et mise à jour quotidienne de l'univers
+├── .github/workflows/       # Tests CI et mise à jour hebdomadaire de l'univers
 ├── data/
 │   └── universe.csv          # Univers d'actions daté utilisé par le tableau de bord
 ├── tests/                    # Tests unitaires (règles de l'univers) et tests de l'application (Streamlit AppTest)

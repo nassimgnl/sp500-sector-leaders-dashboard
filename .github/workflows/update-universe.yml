@@ -1,10 +1,10 @@
 name: Update S&P 500 universe
 
-# Rebuilds the top five companies of each GICS sector after every US trading day.
+# Rebuilds the top five companies of each GICS sector every Monday evening.
 # Commits data/universe.csv and the README table only when the composition changed.
 on:
   schedule:
-    - cron: "30 22 * * 1-5"  # 22:30 UTC, after the US market close
+    - cron: "30 22 * * 1"  # Mondays 22:30 UTC, after the US market close
   workflow_dispatch:
 
 permissions:
