@@ -121,6 +121,6 @@ def test_render_universe_table_lists_sectors_by_market_cap_and_flags_non_members
 
     table = render_universe_table(universe)
 
-    assert "Universe as of **2 November 2026**" in table
+    assert "Univers au **2 novembre 2026**" in table
     assert "| Energy | XOM, CVX |" in table
     assert "| Information Technology | TSM\\* |" in table

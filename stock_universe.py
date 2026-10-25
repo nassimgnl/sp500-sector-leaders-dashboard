@@ -26,6 +26,11 @@ GICS_SECTORS = [
     "Real Estate",
     "Utilities",
 ]
+# README is in French; strftime's %B depends on the system locale, so months are spelled out here.
+FRENCH_MONTHS = [
+    "janvier", "février", "mars", "avril", "mai", "juin",
+    "juillet", "août", "septembre", "octobre", "novembre", "décembre",
+]
 
 
 def to_yahoo_ticker(symbol):
@@ -69,13 +74,14 @@ def render_universe_table(universe):
         for sector in sorted(universe["sector"].unique())
     ]
     return "\n".join([
-        f"Universe as of **{as_of.day} {as_of:%B %Y}** (sorted by market capitalisation within each sector):",
+        f"Univers au **{as_of.day} {FRENCH_MONTHS[as_of.month - 1]} {as_of.year}** "
+        "(trié par capitalisation boursière au sein de chaque secteur) :",
         "",
-        "| GICS sector | Companies |",
+        "| Secteur GICS | Entreprises |",
         "|---|---|",
         *rows,
         "",
-        f"{NON_MEMBER_MARK} Not an S&P 500 constituent.",
+        f"{NON_MEMBER_MARK} Ne fait pas partie du S&P 500.",
     ])
 
 

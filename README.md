@@ -1,59 +1,59 @@
-# S&P 500 Sector Leaders — Equity Risk & Performance Dashboard
+# Leaders sectoriels du S&P 500 — Tableau de bord risque et performance actions
 
-[![Live demo](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://sp500-sector-leaders.streamlit.app)
+[![Démo en ligne](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://sp500-sector-leaders.streamlit.app)
 [![Tests](https://github.com/nassimgnl/sp500-sector-leaders-dashboard/actions/workflows/tests.yml/badge.svg)](https://github.com/nassimgnl/sp500-sector-leaders-dashboard/actions/workflows/tests.yml)
-[![Universe update](https://github.com/nassimgnl/sp500-sector-leaders-dashboard/actions/workflows/update-universe.yml/badge.svg)](https://github.com/nassimgnl/sp500-sector-leaders-dashboard/actions/workflows/update-universe.yml)
+[![Mise à jour de l'univers](https://github.com/nassimgnl/sp500-sector-leaders-dashboard/actions/workflows/update-universe.yml/badge.svg)](https://github.com/nassimgnl/sp500-sector-leaders-dashboard/actions/workflows/update-universe.yml)
 
-**▶ [Open the live dashboard](https://sp500-sector-leaders.streamlit.app)**: no installation needed.
+**▶ [Ouvrir le tableau de bord en ligne](https://sp500-sector-leaders.streamlit.app)** : aucune installation nécessaire.
 
-An interactive dashboard to analyse the risk and return profile of the largest U.S. companies in each GICS sector, benchmarked against the S&P 500 Total Return index.
+Un tableau de bord interactif pour analyser le profil rendement/risque des plus grandes entreprises américaines de chaque secteur GICS, comparées à l'indice S&P 500 Total Return.
 
-Built with Python, pandas, Plotly and Streamlit, using publicly available market data.
+Développé en Python avec pandas, Plotly et Streamlit, à partir de données de marché publiques.
 
-**Author:** Nassim Goundoul
+**Auteur :** Nassim Goundoul
 
-![Dashboard screenshot](docs/dashboard.png)
+![Capture d'écran du tableau de bord](docs/dashboard.png)
 
 ---
 
-## Why this project
+## Pourquoi ce projet
 
-When a portfolio manager or fund selector reviews a stock, the first questions are always the same:
+Lorsqu'un gérant de portefeuille ou un sélectionneur de fonds étudie une action, les premières questions sont toujours les mêmes :
 
-- How much did it return over the period, and **how much risk was taken** to get there?
-- What was the **worst peak-to-trough loss** an investor actually had to sit through?
-- Did it **outperform its benchmark** on a like-for-like (dividends included) basis?
-- How were returns **distributed over time**: steady compounding or a few extreme months?
+- Quelle a été sa performance sur la période, et **quel risque a-t-il fallu prendre** pour l'obtenir ?
+- Quelle a été la **pire perte du plus haut au plus bas** qu'un investisseur a réellement dû encaisser ?
+- A-t-elle **surperformé son indice de référence** à base comparable (dividendes inclus) ?
+- Comment les rendements se sont-ils **répartis dans le temps** : une capitalisation régulière ou quelques mois extrêmes ?
 
-This dashboard answers these questions in a single screen for the market leaders of every sector of the S&P 500, so that companies can be compared on a consistent, reproducible methodology.
+Ce tableau de bord répond à ces questions sur un seul écran pour les leaders de chaque secteur du S&P 500, afin de comparer les entreprises selon une méthodologie cohérente et reproductible.
 
-## Features
+## Fonctionnalités
 
-- **Sector-based stock selection**: pick one of the 11 GICS sectors, then one of its largest companies (ranked by market capitalisation).
-- **Key risk & return metrics**: period total return, annualised volatility, Sharpe ratio and maximum drawdown.
-- **Benchmark-relative metrics**, as used in fund selection: beta, correlation, tracking error and information ratio against the S&P 500 Total Return index.
-- **Price chart** with optional 50-day and 200-day moving averages.
-- **Benchmark comparison**: growth of $100 invested in the stock vs. the S&P 500 Total Return index, dividends reinvested on both sides.
-- **Monthly returns**, **daily return distribution** and **drawdown** charts.
-- **Adjustable analysis window** (start and end dates in the sidebar).
-- **One-click universe update**: the *Update S&P 500 data* button recomputes the top five of each sector from the latest index membership and market caps, and updates the stock list only if it actually changed.
+- **Sélection des actions par secteur** : choix de l'un des 11 secteurs GICS, puis de l'une de ses plus grandes entreprises (classées par capitalisation boursière).
+- **Indicateurs clés de rendement et de risque** : performance totale sur la période, volatilité annualisée, ratio de Sharpe et perte maximale (maximum drawdown).
+- **Indicateurs relatifs à l'indice de référence**, tels qu'utilisés en sélection de fonds : bêta, corrélation, tracking error et ratio d'information par rapport au S&P 500 Total Return.
+- **Graphique des cours** avec moyennes mobiles à 50 et 200 jours en option.
+- **Comparaison avec l'indice** : évolution de 100 $ investis dans l'action et dans le S&P 500 Total Return, dividendes réinvestis des deux côtés.
+- Graphiques des **rendements mensuels**, de la **distribution des rendements quotidiens** et des **drawdowns**.
+- **Période d'analyse ajustable** (dates de début et de fin dans la barre latérale).
+- **Mise à jour de l'univers en un clic** : le bouton *Update S&P 500 data* recalcule le top 5 de chaque secteur à partir de la composition et des capitalisations les plus récentes de l'indice, et ne met à jour la liste des actions que si elle a réellement changé.
 
-## Investment universe
+## Univers d'investissement
 
-The selectable universe is the **five largest S&P 500 constituents by market capitalisation in each of the 11 GICS sectors**, plus two hand-picked additions: Taiwan Semiconductor Manufacturing (TSM, an ADR that is not an S&P 500 member) and Eaton Corporation (ETN).
+L'univers sélectionnable est composé des **cinq plus grandes valeurs du S&P 500 par capitalisation boursière dans chacun des 11 secteurs GICS**, plus deux ajouts choisis manuellement : Taiwan Semiconductor Manufacturing (TSM, un ADR qui ne fait pas partie du S&P 500) et Eaton Corporation (ETN).
 
-Construction rules (`universe_refresh.py`):
+Règles de construction (`universe_refresh.py`) :
 
-1. Download the current S&P 500 constituent list with each company's GICS sector.
-2. Retrieve each constituent's market capitalisation.
-3. Keep **one share class per company** (e.g. GOOGL but not GOOG) so a company never takes two slots in its sector.
-4. Rank companies within each sector by market capitalisation and keep the top five.
-5. Save the result, with its build date, to `data/universe.csv`.
+1. Télécharger la liste actuelle des composants du S&P 500 avec le secteur GICS de chaque entreprise.
+2. Récupérer la capitalisation boursière de chaque composant.
+3. Conserver **une seule catégorie d'actions par entreprise** (par ex. GOOGL mais pas GOOG) afin qu'une entreprise n'occupe jamais deux places dans son secteur.
+4. Classer les entreprises de chaque secteur par capitalisation boursière et garder les cinq premières.
+5. Enregistrer le résultat, avec sa date de construction, dans `data/universe.csv`.
 
 <!-- universe:start -->
-Universe as of **25 October 2026** (sorted by market capitalisation within each sector):
+Univers au **25 octobre 2026** (trié par capitalisation boursière au sein de chaque secteur) :
 
-| GICS sector | Companies |
+| Secteur GICS | Entreprises |
 |---|---|
 | Communication Services | GOOGL, META, NFLX, DIS, VZ |
 | Consumer Discretionary | AMZN, TSLA, HD, MCD, TJX |
@@ -67,102 +67,102 @@ Universe as of **25 October 2026** (sorted by market capitalisation within each 
 | Real Estate | WELL, PLD, EQIX, AMT, SPG |
 | Utilities | NEE, SO, DUK, CEG, AEP |
 
-\* Not an S&P 500 constituent.
+\* Ne fait pas partie du S&P 500.
 <!-- universe:end -->
 
-Storing the universe in a versioned file, rather than recomputing it on every page load, keeps the dashboard fast and makes the stock list **reproducible and dated**.
+Stocker l'univers dans un fichier versionné, plutôt que de le recalculer à chaque chargement de page, garde le tableau de bord rapide et rend la liste des actions **reproductible et datée**.
 
-### Updating the universe
+### Mettre à jour l'univers
 
-Click **Update S&P 500 data** in the dashboard (or run `python scripts/build_universe.py`). The universe is rebuilt from the latest data and compared with the current one:
+Cliquer sur **Update S&P 500 data** dans le tableau de bord (ou lancer `python scripts/build_universe.py`). L'univers est reconstruit à partir des données les plus récentes puis comparé à l'univers actuel :
 
-- **Composition unchanged**: if the same companies are in the same sectors, the file is left untouched and keeps its original date, even if market caps or the ranking inside the top five moved.
-- **Composition changed**: if a company entered or left a sector's top five, or was reclassified to another sector, the new universe is saved with the current date and the dashboard lists the companies added and removed.
-- **Download failure**: if a source is unreachable or returns unexpected data, nothing is written and the current universe stays in use.
-- **Read-only hosting**: if the new universe cannot be saved on the server, it is still applied to the visitor's session, so the update is always visible.
+- **Composition inchangée** : si les mêmes entreprises figurent dans les mêmes secteurs, le fichier n'est pas modifié et conserve sa date d'origine, même si les capitalisations ou le classement au sein du top 5 ont bougé.
+- **Composition modifiée** : si une entreprise est entrée dans le top 5 d'un secteur ou en est sortie, ou a été reclassée dans un autre secteur, le nouvel univers est enregistré à la date du jour et le tableau de bord liste les entreprises ajoutées et retirées.
+- **Échec du téléchargement** : si une source est inaccessible ou renvoie des données inattendues, rien n'est écrit et l'univers actuel reste utilisé.
+- **Hébergement en lecture seule** : si le nouvel univers ne peut pas être enregistré sur le serveur, il est tout de même appliqué à la session du visiteur, de sorte que la mise à jour est toujours visible.
 
-The file is written atomically (temporary file, then rename), so an interrupted update can never leave a half-written universe.
+Le fichier est écrit de manière atomique (fichier temporaire, puis renommage) : une mise à jour interrompue ne peut donc jamais laisser un univers à moitié écrit.
 
-### Automatic daily update
+### Mise à jour quotidienne automatique
 
-A scheduled GitHub Actions workflow ([`update-universe.yml`](.github/workflows/update-universe.yml)) runs the same update after every US trading day. When the composition changed, it commits the new `data/universe.csv` and regenerates the universe table of this README; the live dashboard then redeploys automatically from the repository. No local machine is involved.
+Un workflow GitHub Actions planifié ([`update-universe.yml`](.github/workflows/update-universe.yml)) exécute la même mise à jour après chaque séance de bourse américaine. Lorsque la composition a changé, il commite le nouveau `data/universe.csv` et régénère le tableau de l'univers de ce README ; le tableau de bord en ligne se redéploie alors automatiquement depuis le dépôt. Aucune machine locale n'intervient.
 
-## Data sources
+## Sources de données
 
-| Data | Source | Notes |
+| Donnée | Source | Remarques |
 |---|---|---|
-| S&P 500 membership, GICS sector, CIK | [Wikipedia: List of S&P 500 companies](https://en.wikipedia.org/wiki/List_of_S%26P_500_companies) | Publicly maintained mirror of the S&P Dow Jones Indices constituent list |
-| Market capitalisation | Yahoo Finance, via [`yfinance`](https://github.com/ranaroussi/yfinance) | Used only to rank companies when building the universe |
-| Daily stock prices | Yahoo Finance, via `yfinance` | Close prices **adjusted for splits and dividends** (`auto_adjust=True`) |
-| Benchmark | Yahoo Finance: S&P 500 Total Return index (`^SP500TR`) | Dividends reinvested, consistent with the adjusted stock prices |
+| Composition du S&P 500, secteur GICS, CIK | [Wikipedia : List of S&P 500 companies](https://en.wikipedia.org/wiki/List_of_S%26P_500_companies) | Copie publique de la liste des composants publiée par S&P Dow Jones Indices |
+| Capitalisation boursière | Yahoo Finance, via [`yfinance`](https://github.com/ranaroussi/yfinance) | Utilisée uniquement pour classer les entreprises lors de la construction de l'univers |
+| Cours quotidiens des actions | Yahoo Finance, via `yfinance` | Cours de clôture **ajustés des divisions d'actions et des dividendes** (`auto_adjust=True`) |
+| Indice de référence | Yahoo Finance : indice S&P 500 Total Return (`^SP500TR`) | Dividendes réinvestis, cohérent avec les cours ajustés des actions |
 
-Using the **total return** version of the index is deliberate: comparing dividend-adjusted stock prices with the price-only S&P 500 (`^GSPC`) would overstate the stock's relative performance. Since January 2021 the gap between the two indices is roughly 18 percentage points.
+Le choix de la version **dividendes réinvestis** (total return) de l'indice est délibéré : comparer des cours ajustés des dividendes au S&P 500 hors dividendes (`^GSPC`) surestimerait la performance relative de l'action. Depuis janvier 2021, l'écart entre les deux indices est d'environ 18 points de pourcentage.
 
-Prices are cached for one hour in the app to limit calls to the data provider.
+Les cours sont mis en cache pendant une heure dans l'application pour limiter les appels au fournisseur de données.
 
-## Methodology
+## Méthodologie
 
-All metrics are computed from daily adjusted close prices $P_t$ over the selected window, assuming 252 trading days per year. Benchmark-relative metrics use only the dates on which both the stock and the benchmark have a return (`metrics.py`).
+Tous les indicateurs sont calculés à partir des cours de clôture ajustés quotidiens $P_t$ sur la période sélectionnée, en supposant 252 jours de bourse par an. Les indicateurs relatifs à l'indice n'utilisent que les dates pour lesquelles l'action et l'indice ont tous deux un rendement (`metrics.py`).
 
-| Metric | Definition |
+| Indicateur | Définition |
 |---|---|
-| Daily return | $r_t = P_t / P_{t-1} - 1$ |
-| Period return | $P_T / P_0 - 1$ (total return, since prices include dividends) |
-| Annualised return | $(1 + \bar{r})^{252} - 1$, where $\bar{r}$ is the mean daily return |
-| Annualised volatility | $\sigma(r_t) \times \sqrt{252}$ |
-| Sharpe ratio | (annualised return − 4%) / annualised volatility, with a constant 4% risk-free rate |
-| Maximum drawdown | $\min_t \left( P_t / \max_{s \le t} P_s - 1 \right)$ |
-| Beta | $\mathrm{Cov}(r^{s}, r^{b}) / \mathrm{Var}(r^{b})$, where $r^{s}$ and $r^{b}$ are the stock and benchmark daily returns |
-| Correlation | Pearson correlation of $r^{s}$ and $r^{b}$ |
+| Rendement quotidien | $r_t = P_t / P_{t-1} - 1$ |
+| Performance sur la période | $P_T / P_0 - 1$ (performance totale, les cours incluant les dividendes) |
+| Rendement annualisé | $(1 + \bar{r})^{252} - 1$, où $\bar{r}$ est le rendement quotidien moyen |
+| Volatilité annualisée | $\sigma(r_t) \times \sqrt{252}$ |
+| Ratio de Sharpe | (rendement annualisé − 4 %) / volatilité annualisée, avec un taux sans risque constant de 4 % |
+| Perte maximale (maximum drawdown) | $\min_t \left( P_t / \max_{s \le t} P_s - 1 \right)$ |
+| Bêta | $\mathrm{Cov}(r^{s}, r^{b}) / \mathrm{Var}(r^{b})$, où $r^{s}$ et $r^{b}$ sont les rendements quotidiens de l'action et de l'indice |
+| Corrélation | Corrélation de Pearson entre $r^{s}$ et $r^{b}$ |
 | Tracking error | $\sigma(r^{s} - r^{b}) \times \sqrt{252}$ |
-| Information ratio | $252 \times \overline{(r^{s} - r^{b})}$ / tracking error |
-| Moving averages | Simple 50-day and 200-day averages of the adjusted close |
-| Monthly returns | Month-end to month-end change in the adjusted close |
-| Growth of $100 | $100 \times P_t / P_0$ for both the stock and the benchmark |
+| Ratio d'information | $252 \times \overline{(r^{s} - r^{b})}$ / tracking error |
+| Moyennes mobiles | Moyennes simples à 50 et 200 jours du cours de clôture ajusté |
+| Rendements mensuels | Variation du cours de clôture ajusté d'une fin de mois à la suivante |
+| Évolution de 100 $ | $100 \times P_t / P_0$ pour l'action comme pour l'indice |
 
-## Limitations
+## Limites
 
-These are known simplifications. They are acceptable for an exploratory tool and are listed here explicitly:
+Il s'agit de simplifications connues, acceptables pour un outil exploratoire et listées ici explicitement :
 
-- **Look-ahead and survivorship bias**: the universe is selected using *today's* market capitalisations and applied to past periods. Today's sector leaders are, by construction, companies that did well, so historical results for this universe are flattering.
-- **Constant risk-free rate**: the Sharpe ratio uses a flat 4% instead of the actual T-bill rate over the period.
-- **Annualisation**: the annualised return compounds the arithmetic mean daily return, which is higher than the realised CAGR for volatile stocks.
-- **Single benchmark**: every stock is compared with the broad S&P 500 rather than its own sector index.
-- **Data provider**: Yahoo Finance is a free, unofficial source and is not suited to production use.
+- **Biais d'anticipation et biais du survivant** : l'univers est sélectionné à partir des capitalisations *actuelles* et appliqué à des périodes passées. Les leaders sectoriels d'aujourd'hui sont, par construction, des entreprises qui ont bien performé : les résultats historiques de cet univers sont donc flatteurs.
+- **Taux sans risque constant** : le ratio de Sharpe utilise un taux fixe de 4 % au lieu du taux réel des bons du Trésor sur la période.
+- **Annualisation** : le rendement annualisé capitalise la moyenne arithmétique des rendements quotidiens, ce qui est supérieur au TCAC (CAGR) réellement obtenu pour les actions volatiles.
+- **Indice de référence unique** : chaque action est comparée au S&P 500 dans son ensemble plutôt qu'à son propre indice sectoriel.
+- **Fournisseur de données** : Yahoo Finance est une source gratuite et non officielle, inadaptée à un usage en production.
 
-## Roadmap
+## Feuille de route
 
-- Further fund-selection metrics: **Jensen's alpha**, **up/down capture ratios**, batting average.
-- **Sector benchmarks** (e.g. SPDR sector ETFs) in addition to the S&P 500.
-- **Time-varying risk-free rate** (13-week T-bill, `^IRX`) for the Sharpe ratio and a **Sortino ratio**.
-- **Rolling** volatility, Sharpe and correlation windows.
-- Side-by-side comparison of several stocks.
-- **Point-in-time universe** to remove look-ahead bias in historical analysis.
+- Indicateurs de sélection de fonds supplémentaires : **alpha de Jensen**, **ratios de capture à la hausse et à la baisse**, batting average.
+- **Indices sectoriels** (par ex. les ETF sectoriels SPDR) en plus du S&P 500.
+- **Taux sans risque variable dans le temps** (bons du Trésor à 13 semaines, `^IRX`) pour le ratio de Sharpe, et un **ratio de Sortino**.
+- Volatilité, Sharpe et corrélation sur **fenêtres glissantes**.
+- Comparaison côte à côte de plusieurs actions.
+- **Univers point-in-time** pour supprimer le biais d'anticipation dans l'analyse historique.
 
-## Project structure
+## Structure du projet
 
 ```
 .
-├── app.py                    # Streamlit dashboard
-├── metrics.py                # Benchmark-relative metrics (beta, tracking error, ...)
-├── stock_universe.py         # Universe selection rules and validation
-├── universe_refresh.py       # Live rebuild of the universe, saved only if it changed
+├── app.py                    # Tableau de bord Streamlit
+├── metrics.py                # Indicateurs relatifs à l'indice (bêta, tracking error, ...)
+├── stock_universe.py         # Règles de sélection et validation de l'univers
+├── universe_refresh.py       # Reconstruction en direct de l'univers, enregistrée seulement si elle a changé
 ├── scripts/
-│   └── build_universe.py     # Command-line universe update (also used by the scheduled workflow)
-├── .github/workflows/       # CI tests and daily universe update
+│   └── build_universe.py     # Mise à jour de l'univers en ligne de commande (utilisée aussi par le workflow planifié)
+├── .github/workflows/       # Tests CI et mise à jour quotidienne de l'univers
 ├── data/
-│   └── universe.csv          # Dated stock universe used by the dashboard
-├── tests/                    # Unit tests (universe rules) and app tests (Streamlit AppTest)
+│   └── universe.csv          # Univers d'actions daté utilisé par le tableau de bord
+├── tests/                    # Tests unitaires (règles de l'univers) et tests de l'application (Streamlit AppTest)
 ├── docs/
 │   └── dashboard.png
-├── .streamlit/config.toml    # Dark theme
+├── .streamlit/config.toml    # Thème sombre
 ├── requirements.txt
 └── requirements-dev.txt
 ```
 
-## Getting started
+## Démarrage
 
-Requires Python 3.11 or later.
+Nécessite Python 3.11 ou plus récent.
 
 ```bash
 git clone https://github.com/nassimgnl/sp500-sector-leaders-dashboard.git
@@ -175,9 +175,9 @@ pip install -r requirements.txt
 streamlit run app.py
 ```
 
-The dashboard opens at http://localhost:8501.
+Le tableau de bord s'ouvre à l'adresse http://localhost:8501.
 
-To refresh the stock universe with current market capitalisations:
+Pour actualiser l'univers d'actions avec les capitalisations boursières actuelles :
 
 ```bash
 python scripts/build_universe.py
@@ -190,8 +190,8 @@ pip install -r requirements-dev.txt
 pytest
 ```
 
-The test suite covers the benchmark-relative metrics (checked against synthetic return series with known answers), the universe selection rules (top-N ranking, share-class de-duplication, input validation), the update logic (file rewritten only when the composition changes, untouched on failure), the integrity of the shipped universe file, and the dashboard itself (default view, sector and stock selection, benchmark choice, update button) using Streamlit's `AppTest`. The app tests download live market data and therefore need an internet connection.
+La suite de tests couvre les indicateurs relatifs à l'indice (vérifiés sur des séries de rendements synthétiques dont le résultat est connu), les règles de sélection de l'univers (classement des N premiers, dédoublonnage des catégories d'actions, validation des entrées), la logique de mise à jour (fichier réécrit uniquement si la composition change, intact en cas d'échec), l'intégrité du fichier d'univers fourni, et le tableau de bord lui-même (vue par défaut, sélection du secteur et de l'action, choix de l'indice de référence, bouton de mise à jour) via `AppTest` de Streamlit. Les tests de l'application téléchargent des données de marché en direct et nécessitent donc une connexion internet.
 
-## Disclaimer
+## Avertissement
 
-This project is for educational and portfolio purposes only. It does not constitute investment advice or a recommendation to buy or sell any security.
+Ce projet est réalisé à des fins pédagogiques et de démonstration uniquement. Il ne constitue ni un conseil en investissement ni une recommandation d'achat ou de vente d'un quelconque titre.
