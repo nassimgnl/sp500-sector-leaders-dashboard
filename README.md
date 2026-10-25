@@ -18,7 +18,7 @@ Développé en Python avec pandas, Plotly et Streamlit, à partir de données de
 
 ## Pourquoi ce projet
 
-Lorsqu'un gérant de portefeuille ou un sélectionneur de fonds étudie une action, les premières questions sont toujours les mêmes :
+Lorsqu'un gérant de portefeuille ou un analyste étudie une action, les premières questions sont toujours les mêmes :
 
 - Quelle a été sa performance sur la période, et **quel risque a-t-il fallu prendre** pour l'obtenir ?
 - Quelle a été la **pire perte du plus haut au plus bas** qu'un investisseur a réellement dû encaisser ?
