@@ -62,20 +62,24 @@ def stocks_in_sector(universe, sector):
     return universe[universe["sector"] == sector].sort_values("market_cap_usd", ascending=False, kind="stable")
 
 
-def load_universe(path=UNIVERSE_PATH):
-    """Load and validate the universe file."""
-    universe = pd.read_csv(path)
-
+def validate_universe(universe, source="Universe"):
+    """Raise ``ValueError`` if ``universe`` does not have the expected shape."""
     missing = sorted(set(REQUIRED_COLUMNS) - set(universe.columns))
     if missing:
-        raise ValueError(f"Universe file {path} is missing columns: {missing}")
+        raise ValueError(f"{source} is missing columns: {missing}")
     if universe.empty:
-        raise ValueError(f"Universe file {path} is empty")
+        raise ValueError(f"{source} is empty")
 
     duplicates = universe.loc[universe["ticker"].duplicated(), "ticker"].unique().tolist()
     if duplicates:
-        raise ValueError(f"Universe file {path} has duplicate tickers: {duplicates}")
+        raise ValueError(f"{source} has duplicate tickers: {duplicates}")
     if universe["in_sp500"].dtype != bool:
-        raise ValueError(f"Universe file {path} has non-boolean values in 'in_sp500'")
+        raise ValueError(f"{source} has non-boolean values in 'in_sp500'")
 
     return universe
+
+
+def load_universe(path=None):
+    """Load and validate the universe file (``UNIVERSE_PATH`` by default)."""
+    path = path or UNIVERSE_PATH
+    return validate_universe(pd.read_csv(path), source=f"Universe file {path}")

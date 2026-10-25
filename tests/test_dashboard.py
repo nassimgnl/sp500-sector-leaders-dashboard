@@ -83,3 +83,77 @@ def test_benchmark_is_the_sp500_total_return_index():
     chart_specs = " ".join(chart.proto.spec for chart in app.get("plotly_chart"))
 
     assert "S&P 500 Total Return" in chart_specs
+
+
+@pytest.fixture
+def isolated_universe(tmp_path, monkeypatch):
+    """Point the app at a copy of the universe file so refresh tests never touch the real one."""
+    import stock_universe
+
+    path = tmp_path / "universe.csv"
+    path.write_bytes(stock_universe.UNIVERSE_PATH.read_bytes())
+    monkeypatch.setattr(stock_universe, "UNIVERSE_PATH", path)
+    return path
+
+
+def use_builder(monkeypatch, build):
+    import universe_refresh
+
+    monkeypatch.setattr(universe_refresh, "build_universe", build)
+
+
+def click_refresh(app):
+    return app.button(key="refresh_universe").click().run()
+
+
+def test_refresh_button_shows_the_universe_date(isolated_universe):
+    app = run_app()
+
+    assert not app.exception
+    assert app.button(key="refresh_universe").label == "Update S&P 500 data"
+    assert UNIVERSE["as_of"].iloc[0] in page_text(app)
+
+
+def test_refresh_keeps_universe_when_top_five_is_unchanged(isolated_universe, monkeypatch):
+    original = isolated_universe.read_bytes()
+    use_builder(monkeypatch, lambda: UNIVERSE.assign(market_cap_usd=UNIVERSE["market_cap_usd"] * 1.1, as_of="2026-11-02"))
+
+    app = click_refresh(run_app())
+
+    assert not app.exception
+    assert any("has not changed" in message.value for message in app.info)
+    assert isolated_universe.read_bytes() == original
+
+
+def test_refresh_updates_dropdown_when_a_company_enters_the_top_five(isolated_universe, monkeypatch):
+    replaced = UNIVERSE["ticker"] == "VLO"
+    candidate = UNIVERSE.assign(
+        ticker=UNIVERSE["ticker"].where(~replaced, "OXY"),
+        name=UNIVERSE["name"].where(~replaced, "Occidental Petroleum"),
+        as_of="2026-11-02",
+    )
+    use_builder(monkeypatch, lambda: candidate)
+
+    app = click_refresh(run_app(sector="Energy", ticker="VLO"))
+
+    assert not app.exception
+    message = " ".join(success.value for success in app.success)
+    assert "OXY" in message and "VLO" in message
+    assert any("(OXY)" in label for label in app.selectbox(key="ticker").options)
+    assert app.selectbox(key="ticker").value != "VLO"
+    assert "2026-11-02" in page_text(app)
+
+
+def test_refresh_failure_keeps_universe_and_reports_error(isolated_universe, monkeypatch):
+    original = isolated_universe.read_bytes()
+
+    def failing_build():
+        raise RuntimeError("source unavailable")
+
+    use_builder(monkeypatch, failing_build)
+
+    app = click_refresh(run_app())
+
+    assert not app.exception
+    assert any("source unavailable" in error.value for error in app.error)
+    assert isolated_universe.read_bytes() == original

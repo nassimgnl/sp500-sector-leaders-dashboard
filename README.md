@@ -30,12 +30,13 @@ This dashboard answers these questions in a single screen for the market leaders
 - **Benchmark comparison**: growth of $100 invested in the stock vs. the S&P 500 Total Return index, dividends reinvested on both sides.
 - **Monthly returns**, **daily return distribution** and **drawdown** charts.
 - **Adjustable analysis window** (start and end dates in the sidebar).
+- **One-click universe update**: the *Update S&P 500 data* button recomputes the top five of each sector from the latest index membership and market caps, and updates the stock list only if it actually changed.
 
 ## Investment universe
 
 The selectable universe is the **five largest S&P 500 constituents by market capitalisation in each of the 11 GICS sectors**, plus two hand-picked additions: Taiwan Semiconductor Manufacturing (TSM, an ADR that is not an S&P 500 member) and Eaton Corporation (ETN).
 
-Construction rules (`scripts/build_universe.py`):
+Construction rules (`universe_refresh.py`):
 
 1. Download the current S&P 500 constituent list with each company's GICS sector.
 2. Retrieve each constituent's market capitalisation.
@@ -61,7 +62,17 @@ Universe as of **25 October 2026** (sorted by market capitalisation within each 
 
 \* Not an S&P 500 constituent.
 
-Storing the universe in a versioned file, rather than recomputing it on every page load, keeps the dashboard fast and makes the stock list **reproducible and dated**. Refresh it at any time with `python scripts/build_universe.py`.
+Storing the universe in a versioned file, rather than recomputing it on every page load, keeps the dashboard fast and makes the stock list **reproducible and dated**.
+
+### Updating the universe
+
+Click **Update S&P 500 data** in the dashboard (or run `python scripts/build_universe.py`). The universe is rebuilt from the latest data and compared with the current one:
+
+- **Composition unchanged**: if the same companies are in the same sectors, the file is left untouched and keeps its original date, even if market caps or the ranking inside the top five moved.
+- **Composition changed**: if a company entered or left a sector's top five, or was reclassified to another sector, the new universe is saved with the current date and the dashboard lists the companies added and removed.
+- **Download failure**: if a source is unreachable or returns unexpected data, nothing is written and the current universe stays in use.
+
+The file is written atomically (temporary file, then rename), so an interrupted update can never leave a half-written universe.
 
 ## Data sources
 
@@ -122,8 +133,9 @@ These are known simplifications. They are acceptable for an exploratory tool and
 ├── app.py                    # Streamlit dashboard
 ├── metrics.py                # Benchmark-relative metrics (beta, tracking error, ...)
 ├── stock_universe.py         # Universe selection rules and validation
+├── universe_refresh.py       # Live rebuild of the universe, saved only if it changed
 ├── scripts/
-│   └── build_universe.py     # Rebuilds data/universe.csv from live sources
+│   └── build_universe.py     # Command-line universe update
 ├── data/
 │   └── universe.csv          # Dated stock universe used by the dashboard
 ├── tests/                    # Unit tests (universe rules) and app tests (Streamlit AppTest)
@@ -164,7 +176,7 @@ pip install -r requirements-dev.txt
 pytest
 ```
 
-The test suite covers the benchmark-relative metrics (checked against synthetic return series with known answers), the universe selection rules (top-N ranking, share-class de-duplication, input validation), the integrity of the shipped universe file, and the dashboard itself (default view, sector and stock selection, benchmark choice) using Streamlit's `AppTest`. The app tests download live market data and therefore need an internet connection.
+The test suite covers the benchmark-relative metrics (checked against synthetic return series with known answers), the universe selection rules (top-N ranking, share-class de-duplication, input validation), the update logic (file rewritten only when the composition changes, untouched on failure), the integrity of the shipped universe file, and the dashboard itself (default view, sector and stock selection, benchmark choice, update button) using Streamlit's `AppTest`. The app tests download live market data and therefore need an internet connection.
 
 ## Disclaimer
 

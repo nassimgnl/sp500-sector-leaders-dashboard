@@ -7,11 +7,14 @@ from datetime import date
 
 from metrics import beta, correlation, information_ratio, tracking_error
 from stock_universe import load_universe, stocks_in_sector
+from universe_refresh import refresh_universe
 
 DEFAULT_TICKER = "NVDA"
 BENCHMARK = "^SP500TR"
 BENCHMARK_NAME = "S&P 500 Total Return"
 CACHE_TTL_SECONDS = 3600
+# Network failures (requests errors are OSError subclasses), source layout changes and invalid data.
+REFRESH_ERRORS = (OSError, RuntimeError, ValueError)
 
 
 @st.cache_data(ttl=CACHE_TTL_SECONDS, show_spinner=False)
@@ -98,9 +101,34 @@ def stock_label(symbol):
     return label if companies.at[symbol, "in_sp500"] else f"{label} · not in S&P 500"
 
 
+def refresh_message(result):
+    if not result.changed:
+        return "info", (f"Checked on {date.today():%Y-%m-%d}: the top 5 per sector has not changed. "
+                        f"Universe dated {result.as_of} kept.")
+    if not (result.added or result.removed):
+        return "success", f"Universe updated on {result.as_of}: sector classification changed."
+    return "success", (f"Universe updated on {result.as_of}. "
+                       f"Added: {', '.join(result.added) or 'none'}. Removed: {', '.join(result.removed) or 'none'}.")
+
+
+def refresh_universe_data():
+    try:
+        with st.spinner("Downloading S&P 500 constituents and market caps…"):
+            result = refresh_universe()
+    except REFRESH_ERRORS as error:
+        st.session_state["refresh_feedback"] = ("error", f"Update failed, the current universe was kept: {error}")
+        return
+
+    st.session_state["refresh_feedback"] = refresh_message(result)
+    if result.changed:
+        sector_stocks_after = stocks_in_sector(load_universe(), st.session_state["sector"])["ticker"]
+        if st.session_state.get("ticker") not in set(sector_stocks_after):
+            st.session_state["ticker"] = sector_stocks_after.iloc[0]
+
+
 header = st.empty()
 
-_, sector_picker, stock_picker, _ = st.columns([1, 1, 1, 1])
+_, sector_picker, stock_picker, refresh_column = st.columns([1, 1, 1, 1], vertical_alignment="bottom")
 sector = sector_picker.selectbox(
     "Sector",
     options=sectors,
@@ -117,6 +145,26 @@ ticker = stock_picker.selectbox(
     key="ticker",
 )
 company = companies.at[ticker, "name"]
+universe_date = universe["as_of"].iloc[0]
+
+refresh_column.button(
+    "Update S&P 500 data",
+    key="refresh_universe",
+    on_click=refresh_universe_data,
+    help="Recompute the 5 largest companies of each sector from today's S&P 500 data. "
+         "The list changes only if a company entered or left the top 5.",
+)
+
+st.markdown(f"""
+<div style="text-align:center; font-size:12px; color:#8A8A8A; margin:2px 0 14px;">
+    Universe: 5 largest S&P 500 companies per GICS sector by market cap · as of {universe_date}
+</div>
+""", unsafe_allow_html=True)
+
+feedback = st.session_state.pop("refresh_feedback", None)
+if feedback is not None:
+    level, message = feedback
+    {"info": st.info, "success": st.success, "error": st.error}[level](message)
 
 start_date = st.sidebar.date_input("Start date", pd.to_datetime("2021-01-01"))
 end_date = st.sidebar.date_input("End date", date.today())
