@@ -1,56 +1,56 @@
 ticker,name,sector,market_cap_usd,as_of
-GOOGL,Alphabet Inc. (Class A),Communication Services,3916147327731,2026-10-25
-META,Meta Platforms,Communication Services,1637078437871,2026-10-25
-NFLX,Netflix,Communication Services,274195421311,2026-10-25
-DIS,Walt Disney Company (The),Communication Services,194286804417,2026-10-25
-VZ,Verizon,Communication Services,185552259887,2026-10-25
-AMZN,Amazon,Consumer Discretionary,2675005765856,2026-10-25
-TSLA,"Tesla, Inc.",Consumer Discretionary,1471285222375,2026-10-25
-HD,Home Depot (The),Consumer Discretionary,319091059687,2026-10-25
-MCD,McDonald's,Consumer Discretionary,175820619543,2026-10-25
-TJX,TJX Companies,Consumer Discretionary,160248424240,2026-10-25
-WMT,Walmart,Consumer Staples,951176831991,2026-10-25
-COST,Costco,Consumer Staples,444600541684,2026-10-25
-KO,Coca-Cola Company (The),Consumer Staples,398889336379,2026-10-25
-PG,Procter & Gamble,Consumer Staples,373209451588,2026-10-25
-PM,Philip Morris International,Consumer Staples,310896624580,2026-10-25
-XOM,ExxonMobil,Energy,753343417798,2026-10-25
-CVX,Chevron Corporation,Energy,457465512699,2026-10-25
-COP,ConocoPhillips,Energy,183718739974,2026-10-25
-MPC,Marathon Petroleum,Energy,133479268611,2026-10-25
-VLO,Valero Energy,Energy,120722225497,2026-10-25
-BRK-B,Berkshire Hathaway,Financials,1160671448435,2026-10-25
-JPM,JPMorgan Chase,Financials,880543812341,2026-10-25
-V,Visa Inc.,Financials,765810782460,2026-10-25
-MA,Mastercard,Financials,546279777197,2026-10-25
-BAC,Bank of America,Financials,350011485038,2026-10-25
-LLY,Lilly (Eli),Health Care,1135596976051,2026-10-25
-JNJ,Johnson & Johnson,Health Care,635072515396,2026-10-25
-ABBV,AbbVie,Health Care,504759407173,2026-10-25
-UNH,UnitedHealth Group,Health Care,375275426295,2026-10-25
-MRK,Merck & Co.,Health Care,358406034393,2026-10-25
-CAT,Caterpillar Inc.,Industrials,315796648743,2026-10-25
-GE,GE Aerospace,Industrials,296369371412,2026-10-25
-RTX,RTX Corporation,Industrials,257756631661,2026-10-25
-GEV,GE Vernova,Industrials,217061868515,2026-10-25
-DE,Deere & Company,Industrials,174218466546,2026-10-25
-NVDA,Nvidia,Information Technology,5094051282120,2026-10-25
-AAPL,Apple Inc.,Information Technology,5074834371736,2026-10-25
-MSFT,Microsoft,Information Technology,3894772938000,2026-10-25
-AVGO,Broadcom,Information Technology,1535581220010,2026-10-25
-MU,Micron Technology,Information Technology,992880425879,2026-10-25
-LIN,Linde plc,Materials,234560530149,2026-10-25
-NEM,Newmont,Materials,113136964905,2026-10-25
-FCX,Freeport-McMoRan,Materials,93599622587,2026-10-25
-SHW,Sherwin-Williams,Materials,81824061783,2026-10-25
-ECL,Ecolab,Materials,80883211481,2026-10-25
-WELL,Welltower,Real Estate,171006154928,2026-10-25
-PLD,Prologis,Real Estate,120169651989,2026-10-25
-EQIX,Equinix,Real Estate,94234423171,2026-10-25
-AMT,American Tower,Real Estate,88052470839,2026-10-25
-SPG,Simon Property Group,Real Estate,68474901739,2026-10-25
-NEE,NextEra Energy,Utilities,172188823423,2026-10-25
-SO,Southern Company,Utilities,106857215210,2026-10-25
-DUK,Duke Energy,Utilities,97447182699,2026-10-25
-CEG,Constellation Energy,Utilities,89799204126,2026-10-25
-AEP,American Electric Power,Utilities,70602893910,2026-10-25
+GOOGL,Alphabet Inc. (Class A),Communication Services,3874443205170,2026-10-27
+META,Meta Platforms,Communication Services,1606355519017,2026-10-27
+NFLX,Netflix,Communication Services,266075751650,2026-10-27
+DIS,Walt Disney Company (The),Communication Services,190626236616,2026-10-27
+VZ,Verizon,Communication Services,179070804867,2026-10-27
+AMZN,Amazon,Consumer Discretionary,2686762808149,2026-10-27
+TSLA,"Tesla, Inc.",Consumer Discretionary,1547968163217,2026-10-27
+HD,Home Depot (The),Consumer Discretionary,318642117623,2026-10-27
+MCD,McDonald's,Consumer Discretionary,177497726516,2026-10-27
+TJX,TJX Companies,Consumer Discretionary,158066269209,2026-10-27
+WMT,Walmart,Consumer Staples,954350342593,2026-10-27
+COST,Costco,Consumer Staples,445415884540,2026-10-27
+KO,Coca-Cola Company (The),Consumer Staples,398846301696,2026-10-27
+PG,Procter & Gamble,Consumer Staples,370659875985,2026-10-27
+PM,Philip Morris International,Consumer Staples,314637287321,2026-10-27
+XOM,ExxonMobil,Energy,758812205492,2026-10-27
+CVX,Chevron Corporation,Energy,455111564825,2026-10-27
+COP,ConocoPhillips,Energy,184413157891,2026-10-27
+MPC,Marathon Petroleum,Energy,132167370572,2026-10-27
+VLO,Valero Energy,Energy,122875926068,2026-10-27
+BRK-B,Berkshire Hathaway,Financials,1174307759370,2026-10-27
+JPM,JPMorgan Chase,Financials,887076646692,2026-10-27
+V,Visa Inc.,Financials,758751908353,2026-10-27
+MA,Mastercard,Financials,537432098190,2026-10-27
+BAC,Bank of America,Financials,349734570887,2026-10-27
+LLY,Lilly (Eli),Health Care,1140662115133,2026-10-27
+JNJ,Johnson & Johnson,Health Care,641066694450,2026-10-27
+ABBV,AbbVie,Health Care,506703193044,2026-10-27
+UNH,UnitedHealth Group,Health Care,368642214620,2026-10-27
+MRK,Merck & Co.,Health Care,346909005525,2026-10-27
+CAT,Caterpillar Inc.,Industrials,318154783168,2026-10-27
+GE,GE Aerospace,Industrials,299264148025,2026-10-27
+RTX,RTX Corporation,Industrials,266487513654,2026-10-27
+GEV,GE Vernova,Industrials,227747170484,2026-10-27
+UNP,Union Pacific Corporation,Industrials,176422601366,2026-10-27
+NVDA,Nvidia,Information Technology,5215752000000,2026-10-27
+AAPL,Apple Inc.,Information Technology,5019084497245,2026-10-27
+MSFT,Microsoft,Information Technology,3954845347219,2026-10-27
+AVGO,Broadcom,Information Technology,1571335806761,2026-10-27
+MU,Micron Technology,Information Technology,1022467170496,2026-10-27
+LIN,Linde plc,Materials,233975090407,2026-10-27
+NEM,Newmont,Materials,114716535058,2026-10-27
+FCX,Freeport-McMoRan,Materials,93570907058,2026-10-27
+SHW,Sherwin-Williams,Materials,81362822778,2026-10-27
+ECL,Ecolab,Materials,80984134227,2026-10-27
+WELL,Welltower,Real Estate,173376832007,2026-10-27
+PLD,Prologis,Real Estate,120036605897,2026-10-27
+EQIX,Equinix,Real Estate,95479659367,2026-10-27
+AMT,American Tower,Real Estate,87730957269,2026-10-27
+SPG,Simon Property Group,Real Estate,68817874035,2026-10-27
+NEE,NextEra Energy,Utilities,172062990180,2026-10-27
+SO,Southern Company,Utilities,106489099412,2026-10-27
+DUK,Duke Energy,Utilities,97026142800,2026-10-27
+CEG,Constellation Energy,Utilities,89455525536,2026-10-27
+AEP,American Electric Power,Utilities,70347026490,2026-10-27
