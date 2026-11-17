@@ -51,7 +51,7 @@ Règles de construction (`universe_refresh.py`) :
 5. Enregistrer le résultat, avec sa date de construction, dans `data/universe.csv`.
 
 <!-- universe:start -->
-Univers au **10 novembre 2026** (trié par capitalisation boursière au sein de chaque secteur) :
+Univers au **17 novembre 2026** (trié par capitalisation boursière au sein de chaque secteur) :
 
 | Secteur GICS | Entreprises |
 |---|---|
@@ -60,10 +60,10 @@ Univers au **10 novembre 2026** (trié par capitalisation boursière au sein de 
 | Consumer Staples | WMT, COST, KO, PG, PM |
 | Energy | XOM, CVX, COP, MPC, VLO |
 | Financials | BRK-B, JPM, V, MA, BAC |
-| Health Care | LLY, JNJ, ABBV, MRK, UNH |
-| Industrials | GE, CAT, RTX, GEV, DE |
-| Information Technology | AAPL, NVDA, MSFT, AVGO, AMD |
-| Materials | LIN, NEM, FCX, SHW, ECL |
+| Health Care | LLY, JNJ, ABBV, UNH, MRK |
+| Industrials | GE, RTX, CAT, GEV, UNP |
+| Information Technology | AAPL, MSFT, NVDA, AVGO, AMD |
+| Materials | LIN, NEM, ECL, SHW, FCX |
 | Real Estate | WELL, PLD, EQIX, AMT, SPG |
 | Utilities | NEE, SO, DUK, CEG, AEP |
 <!-- universe:end -->
